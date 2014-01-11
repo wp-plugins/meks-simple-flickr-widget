@@ -17,8 +17,8 @@ Quickly display your Flickr photos inside WordPress widget. No authorization req
 
 ### Features
 
-* Easy to use
 * No authorization required (only provide your user id)
+* Change thumbnail size
 * Caching system integrated for better performance
 
 This plugin is created by <a href="http://mekshq.com" target="_blank">MeksHQ</a>
