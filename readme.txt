@@ -1,7 +1,7 @@
 === Meks Simple Flickr Widget ===
 Contributors: mekshq
 Donate link: http://mekshq.com/
-Tags: flickr, widget, sidebar, photos, photosream
+Tags: flickr, widget, sidebar, photos, photostream
 Requires at least: 3.0
 Tested up to: 3.8
 Stable tag: 1.0
