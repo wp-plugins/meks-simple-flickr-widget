@@ -16,7 +16,7 @@ class MKS_Flickr_Widget extends WP_Widget {
 	}
 
 	function enqueue_styles(){
- 		wp_register_style( 'meks-flickr-widget', MKS_FLICKR_WIDGET_URL.'css/style.css', false, '1.0.0' );
+ 		wp_register_style( 'meks-flickr-widget', MKS_FLICKR_WIDGET_URL.'css/style.css', false, MKS_FLICKR_WIDGET_VER );
     	wp_enqueue_style( 'meks-flickr-widget' );
     }
 	
@@ -104,7 +104,7 @@ function widget( $args, $instance ) {
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'id' ); ?>"><?php _e( 'Flickr ID', 'meks' ); ?>:</label> <small><a href="http://idgettr.com/" target="_blank"><?php _e( 'What\'s my Flickr ID?' ); ?></a></small>
+			<label for="<?php echo $this->get_field_id( 'id' ); ?>"><?php _e( 'Flickr ID', 'meks' ); ?>:</label> <small><a href="http://idgettr.com/" target="_blank"><?php _e( 'What\'s my Flickr ID?', 'meks' ); ?></a></small>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'id' ); ?>" name="<?php echo $this->get_field_name( 'id' ); ?>" type="text" value="<?php echo esc_attr( $instance['id'] ); ?>" />
 			<small class="howto"><?php _e( 'Example ID: 23100287@N07', 'meks' ); ?></small>
 		</p>
