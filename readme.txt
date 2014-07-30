@@ -3,8 +3,8 @@ Contributors: mekshq
 Donate link: http://mekshq.com/
 Tags: flickr, widget, sidebar, photos, photostream
 Requires at least: 3.0
-Tested up to: 3.8.1
-Stable tag: 1.0.2
+Tested up to: 3.9.1
+Stable tag: 1.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -21,7 +21,7 @@ Quickly display your Flickr photos inside WordPress widget. No authorization req
 * Change thumbnail size
 * Caching system integrated for better performance
 
-This plugin is created by <a href="http://mekshq.com" target="_blank">MeksHQ</a>
+Simple Flickr Widget plugin is created by <a href="http://mekshq.com" target="_blank">MeksHQ</a>
 
 == Installation ==
 
@@ -39,6 +39,9 @@ For any questions, error reports and suggestions please email support@mekshq.com
 2. Widget in action
 
 == Changelog ==
+
+= 1.0.3 =
+* Full compatibility with new WordPress customizer in WP 3.9+
 
 = 1.0.2 =
 * Added translation files (en_US)

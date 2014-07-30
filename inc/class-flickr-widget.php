@@ -5,6 +5,8 @@
 
 class MKS_Flickr_Widget extends WP_Widget {
 	
+	var $defaults;
+
 	function MKS_Flickr_Widget() {
 		$widget_ops = array( 'classname' => 'mks_flickr_widget', 'description' => __( 'Display your Flickr photostream', 'meks') );
 		$control_ops = array( 'id_base' => 'mks_flickr_widget' );
@@ -13,6 +15,14 @@ class MKS_Flickr_Widget extends WP_Widget {
 		if(!is_admin()){
 		  add_action( 'wp_enqueue_scripts', array($this,'enqueue_styles'));
 		}
+
+		$this->defaults = array(
+			 'title' => 'Flickr',
+			 'id' => '', 
+			 'count' => 9,
+			 't_width' => 85,
+			 't_height' => 85
+		);
 	}
 
 	function enqueue_styles(){
@@ -22,7 +32,11 @@ class MKS_Flickr_Widget extends WP_Widget {
 	
 
 function widget( $args, $instance ) {
+		
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
+
 		extract( $args );
+		
 		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		echo $before_widget;
@@ -91,14 +105,9 @@ function widget( $args, $instance ) {
 
 	
 	function form( $instance ) {
-		$defaults = array(
-		 'title' => '', 
-		 'id' => '', 
-		 'count' => 8,
-		 't_width' => 85,
-		 't_height' => 85
-		);
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+		
+		$instance = wp_parse_args( (array) $instance, $this->defaults ); ?>
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'meks' ); ?>:</label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
