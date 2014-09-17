@@ -23,6 +23,10 @@ Quickly display your Flickr photos inside WordPress widget. No authorization req
 
 Simple Flickr Widget plugin is created by <a href="http://mekshq.com" target="_blank">MeksHQ</a>
 
+### Live preview?
+
+You can see Simple Flickr Widget live example on our <a href="http://mekshq.com/demo/throne" target="_blank">Throne theme demo website</a>
+
 == Installation ==
 
 1. Upload meks-simple-flickr-widget.zip to plugins via WordPress admin panel or upload unzipped folder to your wp-content/plugins/ folder
