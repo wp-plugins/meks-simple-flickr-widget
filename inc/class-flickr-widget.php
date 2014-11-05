@@ -23,6 +23,9 @@ class MKS_Flickr_Widget extends WP_Widget {
 			 't_width' => 85,
 			 't_height' => 85
 		);
+
+		//Allow themes or plugins to modify default parameters
+		$this->defaults = apply_filters('mks_flickr_widget_modify_defaults', $this->defaults);
 	}
 
 	function enqueue_styles(){
