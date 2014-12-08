@@ -4,52 +4,52 @@
 /*-----------------------------------------------------------------------------------*/
 
 class MKS_Flickr_Widget extends WP_Widget {
-	
+
 	var $defaults;
 
 	function MKS_Flickr_Widget() {
-		$widget_ops = array( 'classname' => 'mks_flickr_widget', 'description' => __( 'Display your Flickr photostream', 'meks') );
+		$widget_ops = array( 'classname' => 'mks_flickr_widget', 'description' => __( 'Display your Flickr photostream', 'meks' ) );
 		$control_ops = array( 'id_base' => 'mks_flickr_widget' );
-		$this->WP_Widget('mks_flickr_widget', __('Meks Flickr Widget', 'meks'), $widget_ops, $control_ops);
+		$this->WP_Widget( 'mks_flickr_widget', __( 'Meks Flickr Widget', 'meks' ), $widget_ops, $control_ops );
 
-		if(!is_admin()){
-		  add_action( 'wp_enqueue_scripts', array($this,'enqueue_styles'));
+		if ( !is_admin() ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		}
 
 		$this->defaults = array(
-			 'title' => 'Flickr',
-			 'id' => '', 
-			 'count' => 9,
-			 't_width' => 85,
-			 't_height' => 85
+			'title' => 'Flickr',
+			'id' => '',
+			'count' => 9,
+			't_width' => 85,
+			't_height' => 85
 		);
 
 		//Allow themes or plugins to modify default parameters
-		$this->defaults = apply_filters('mks_flickr_widget_modify_defaults', $this->defaults);
+		$this->defaults = apply_filters( 'mks_flickr_widget_modify_defaults', $this->defaults );
 	}
 
-	function enqueue_styles(){
- 		wp_register_style( 'meks-flickr-widget', MKS_FLICKR_WIDGET_URL.'css/style.css', false, MKS_FLICKR_WIDGET_VER );
-    	wp_enqueue_style( 'meks-flickr-widget' );
-    }
-	
+	function enqueue_styles() {
+		wp_register_style( 'meks-flickr-widget', MKS_FLICKR_WIDGET_URL.'css/style.css', false, MKS_FLICKR_WIDGET_VER );
+		wp_enqueue_style( 'meks-flickr-widget' );
+	}
 
-function widget( $args, $instance ) {
-		
+
+	function widget( $args, $instance ) {
+
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		extract( $args );
-		
+
 		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		echo $before_widget;
-		if ( ! empty( $title ) ){
+		if ( ! empty( $title ) ) {
 			echo $before_title . $title . $after_title;
 		}
 
-		$photos = $this->get_photos( $instance['id'], $instance['count']);
-		
-		if(!empty($photos)){
+		$photos = $this->get_photos( $instance['id'], $instance['count'] );
+
+		if ( !empty( $photos ) ) {
 			$style = 'style="width: '.$instance['t_width'].'px; height: '.$instance['t_height'].'px;"';
 			echo '<ul class="flickr">';
 			foreach ( $photos as $photo ) {
@@ -61,38 +61,45 @@ function widget( $args, $instance ) {
 		echo $after_widget;
 	}
 
-	
-	function get_photos( $id, $count = 8) {
-		if(empty($id))
+
+	function get_photos( $id, $count = 8 ) {
+		if ( empty( $id ) )
 			return false;
-	
-	$transient_key = md5( 'mks_flickr_cache_' . $id . $count);
-	$cached = get_transient( $transient_key );
-	if (!empty($cached)){
+
+		$transient_key = md5( 'mks_flickr_cache_' . $id . $count );
+		$cached = get_transient( $transient_key );
+		if ( !empty( $cached ) ) {
 			return $cached;
-	}
-	
-	$output = array();
-		  $rss = 'http://api.flickr.com/services/feeds/photos_public.gne?id='.$id.'&lang=en-us&format=rss_200';
-			$rss = fetch_feed($rss);
-			if (!is_wp_error( $rss ) ) { 
-    	$maxitems = $rss->get_item_quantity($count); 
-    	$rss_items = $rss->get_items(0, $maxitems);
-    	foreach ( $rss_items as $item ) {
-    		$temp = array();
-    		$temp['img_url'] = esc_url( $item->get_permalink() );
-    		$temp['title'] = esc_html( $item->get_title() );
-    		$content =  $item->get_content();
-    		preg_match_all("/<IMG.+?SRC=[\"']([^\"']+)/si",$content,$sub,PREG_SET_ORDER);
-				$photo_url = str_replace( "_m.jpg", "_t.jpg", $sub[0][1] );
-    		$temp['img_src'] = esc_url($photo_url);
-    		$output[] = $temp;
-			}
-			
-			set_transient( $transient_key, $output, 60 * 60 * 24);
 		}
-		
-		
+
+		$output = array();
+		$rss = 'http://api.flickr.com/services/feeds/photos_public.gne?id='.$id.'&lang=en-us&format=rss_200';
+		$rss = fetch_feed( $rss );
+
+		if ( is_wp_error( $rss ) ) {
+			//check for group feed
+			$rss = 'http://api.flickr.com/services/feeds/groups_pool.gne?id='.$id.'&lang=en-us&format=rss_200';
+			$rss = fetch_feed( $rss );
+		}
+
+		if ( !is_wp_error( $rss ) ) {
+			$maxitems = $rss->get_item_quantity( $count );
+			$rss_items = $rss->get_items( 0, $maxitems );
+			foreach ( $rss_items as $item ) {
+				$temp = array();
+				$temp['img_url'] = esc_url( $item->get_permalink() );
+				$temp['title'] = esc_html( $item->get_title() );
+				$content =  $item->get_content();
+				preg_match_all( "/<IMG.+?SRC=[\"']([^\"']+)/si", $content, $sub, PREG_SET_ORDER );
+				$photo_url = str_replace( "_m.jpg", "_t.jpg", $sub[0][1] );
+				$temp['img_src'] = esc_url( $photo_url );
+				$output[] = $temp;
+			}
+
+			set_transient( $transient_key, $output, 60 * 60 * 24 );
+		}
+
+
 		return $output;
 	}
 
@@ -106,13 +113,13 @@ function widget( $args, $instance ) {
 		return $new_instance;
 	}
 
-	
+
 	function form( $instance ) {
-		
+
 		$instance = wp_parse_args( (array) $instance, $this->defaults ); ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'meks' ); ?>:</label> 
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'meks' ); ?>:</label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 		<p>
@@ -124,12 +131,12 @@ function widget( $args, $instance ) {
 			<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Number of photos', 'meks' ); ?>:</label>
 			<input class="small-text" type="text" value="<?php echo absint( $instance['count'] ); ?>" id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" />
 		</p>
-		
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 't_width' ); ?>"><?php _e( 'Thumbnail width', 'meks' ); ?>:</label>
 			<input class="small-text" type="text" value="<?php echo absint( $instance['t_width'] ); ?>" id="<?php echo $this->get_field_id( 't_width' ); ?>" name="<?php echo $this->get_field_name( 't_width' ); ?>" /> px
 		</p>
-		
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 't_height' ); ?>"><?php _e( 'Thumbnail height', 'meks' ); ?>:</label>
 			<input class="small-text" type="text" value="<?php echo absint( $instance['t_height'] ); ?>" id="<?php echo $this->get_field_id( 't_height' ); ?>" name="<?php echo $this->get_field_name( 't_height' ); ?>" /> px

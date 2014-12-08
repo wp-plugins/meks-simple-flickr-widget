@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 Plugin Name: Meks Simple Flickr Widget
 Plugin URI: http://mekshq.com
@@ -26,23 +26,23 @@ Author URI: http://mekshq.com
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define ('MKS_FLICKR_WIDGET_URL', trailingslashit(plugin_dir_url(__FILE__)));
-define ('MKS_FLICKR_WIDGET_DIR', trailingslashit(plugin_dir_path(__FILE__)));
-define ('MKS_FLICKR_WIDGET_VER', '1.0.3');
+define( 'MKS_FLICKR_WIDGET_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'MKS_FLICKR_WIDGET_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'MKS_FLICKR_WIDGET_VER', '1.1' );
 
 /* Initialize Widget */
-if(!function_exists('mks_flickr_widget_init')):
-	function mks_flickr_widget_init() {
-		require_once(MKS_FLICKR_WIDGET_DIR.'inc/class-flickr-widget.php');
-		register_widget('MKS_Flickr_Widget');
-	}
+if ( !function_exists( 'mks_flickr_widget_init' ) ):
+    function mks_flickr_widget_init() {
+        require_once MKS_FLICKR_WIDGET_DIR.'inc/class-flickr-widget.php';
+        register_widget( 'MKS_Flickr_Widget' );
+    }
 endif;
 
-add_action('widgets_init','mks_flickr_widget_init');
+add_action( 'widgets_init', 'mks_flickr_widget_init' );
 
 /* Load text domain */
 function mks_load_flickr_widget_text_domain() {
-  load_plugin_textdomain( 'meks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+    load_plugin_textdomain( 'meks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 add_action( 'plugins_loaded', 'mks_load_flickr_widget_text_domain' );
